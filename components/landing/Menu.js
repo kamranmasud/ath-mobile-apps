@@ -31,7 +31,7 @@ const Menu = () => {
             source={{
               uri: 'https://images.pexels.com/photos/675951/pexels-photo-675951.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
             }}></Image>
-          <Text style={styles.menuText}>Menu</Text>
+          <Text style={styles.menuText}>قائمة</Text>
         </View>
       </View>
 

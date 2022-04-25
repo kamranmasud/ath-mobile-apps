@@ -1,8 +1,8 @@
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const Stores = props => {
-  const {branch} = props;
+  const branch = props.branch;
   return (
     <View style={styles.stores}>
       <Image source={{uri: branch.image}} style={styles.images} />

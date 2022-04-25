@@ -3,9 +3,9 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
+  FlatList,
 } from 'react-native';
-import React, {Component} from 'react';
+import React, { Component, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import BackNav from '../BackNav';
@@ -36,7 +36,7 @@ const deleteCart = async () => {
 export class Branches extends Component {
   constructor(props) {
     super(props);
-    const {navigation} = props;
+    const { navigation } = props;
     this.state = {
       branches: [],
     };
@@ -56,7 +56,7 @@ export class Branches extends Component {
         try {
           const jsonRes = await res.json();
           if (res.status === 200) {
-            //console.log(jsonRes);
+            // console.log(jsonRes);
 
             jsonRes.map((branches, i) => {
               let data = {
@@ -69,7 +69,7 @@ export class Branches extends Component {
               };
               arr.push(data);
             });
-            //console.log(arr);
+            // console.log(arr);
             this.setState({
               branches: arr,
             });
@@ -84,28 +84,8 @@ export class Branches extends Component {
   }
 
   render() {
-    var branches = {
-      branches: [
-        {
-          key: 1,
-          image:
-            'https://images.pexels.com/photos/10152629/pexels-photo-10152629.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-          name: 'Al Majaz Waterfront',
-          floor: 'Ground Floor',
-          distance: '1.1 km',
-        },
-        {
-          key: 2,
-          image:
-            'https://images.pexels.com/photos/262047/pexels-photo-262047.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-          name: 'Dubai Mall',
-          floor: 'Ground Floor',
-          distance: '4.5 km',
-        },
-      ],
-    };
     return (
-      <View style={{backgroundColor: 'white', flex: 1}}>
+      <View style={{ backgroundColor: 'white', flex: 1 }}>
         <BackNav navigation={this.props.navigation} login={false} />
         <View style={styles.branchesBox}>
           <View style={styles.mapBox}>
@@ -115,7 +95,20 @@ export class Branches extends Component {
               <Text style={styles.colorMap}>Map</Text>
             </TouchableOpacity>
           </View>
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <FlatList
+            data={this.state.branches}
+            renderItem={({ item }) => <Branch branch={item}
+              navigation={this.props.navigation}
+              name={this.props.route.params.name}
+              type={this.props.route.params.type} />}
+            removeClippedSubviews={true} // Unmount components when outside of window 
+            initialNumToRender={2} // Reduce initial render amount
+            maxToRenderPerBatch={1} // Reduce number in each render batch
+            updateCellsBatchingPeriod={100} // Increase time between renders
+            windowSize={7} // Reduce the window size
+            numColumns={2}
+          />
+          {/* <ScrollView showsVerticalScrollIndicator={false}>
             {this.state.branches.map(branch => (
               <TouchableOpacity
                 key={branch.key}
@@ -129,11 +122,27 @@ export class Branches extends Component {
                 <Stores branch={branch} />
               </TouchableOpacity>
             ))}
-          </ScrollView>
+          </ScrollView> */}
         </View>
       </View>
     );
   }
+}
+
+const Branch = (props) => {
+  return (
+    <TouchableOpacity
+      key={props.branch.key}
+      onPress={() =>
+        props.navigation.navigate(props.name, {
+          name: 'AddToCart',
+          branchId: props.branch.id,
+          type: props.type,
+        })
+      }>
+      <Stores branch={props.branch} />
+    </TouchableOpacity>
+  )
 }
 
 export default Branches;
@@ -158,7 +167,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
