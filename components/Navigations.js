@@ -26,7 +26,7 @@ const Navigations = props => {
         style={styles.options}
         onPress={() => navigatePage(navigation, 'Rewards')}>
         {/* <Icon name="bars" size={20}></Icon> */}
-        <Text style={styles.tims}>Tims</Text>
+        <Text style={styles.tims}>ATH</Text>
         <Text style={{color: page === 'Rewards' ? colour : 'grey'}}>
           Rewards
         </Text>
@@ -58,7 +58,7 @@ export default Navigations;
 
 function navigatePage(nav, pg) {
   page = pg;
-  if (pg === 'Stores') return nav.navigate('Branches');
+  if (pg === 'Stores') return nav.navigate('Stores');
   return nav.navigate(pg);
 }
 const styles = StyleSheet.create({

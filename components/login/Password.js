@@ -22,8 +22,10 @@ const Password = props => {
   const [val3, setVal3] = useState();
   const [val4, setVal4] = useState();
   const token = 'AAAA-BBBB-CCCC-DDDD';
+  // const url =
+  //   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
   const url =
-    Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
 
   const storeData = async value => {
     try {
@@ -75,6 +77,9 @@ const Password = props => {
                 storeData(jsonRes);
                 props.navigation.navigate('Landing');
               }
+            }
+            else {
+              alert(JSON.stringify(jsonRes.message));
             }
           } catch (err) {
             console.log(err);

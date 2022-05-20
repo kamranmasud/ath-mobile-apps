@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,7 +9,8 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useFocusEffect} from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
+import RadioButton from 'react-native-radio-button';
 
 const ViewCart = props => {
   //const {props} = props
@@ -18,15 +19,35 @@ const ViewCart = props => {
   const [total, setTotal] = useState(0);
   const [delivery, setDelivery] = useState(10);
   const [totalPoints, setTotalPoints] = useState(0);
-  const [data] = useState(props.props.route.params);
+  const [data, setData] = useState(props.props.route.params);
   const [customer, setCustomer] = useState([]);
+  const [deliveryIsSelected, setDeliveryIsSelected] = useState(false);
+  const [pickupIsSelected, setPickupIsSelected] = useState(false);
+  const [deliveryOption, setDeliveryOption] = useState("");
+
   const token = 'AAAA-BBBB-CCCC-DDDD';
+  // const url =
+  //   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
   const url =
-    Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
   useEffect(() => {
     setTotal(0);
     getCart();
     getData();
+
+    if (global.DELIVERY_OPTION != "Menu") {
+      if (global.DELIVERY_OPTION == "Delivery") {
+        setDeliveryOption("Delivery");
+        setDeliveryIsSelected(true);
+        setPickupIsSelected(false);
+      }
+      else if (global.DELIVERY_OPTION == "Pickup") {
+        setDeliveryOption("Pickup");
+        setDeliveryIsSelected(false);
+        setPickupIsSelected(true);
+      }
+    }
+    
     return () => console.log('unmounting...');
   }, []);
   useFocusEffect(
@@ -97,7 +118,7 @@ const ViewCart = props => {
                       pricesItems +
                       (jsonRes.price -
                         (jsonRes.price * jsonRes.discount) / 100) *
-                        element.cart[0].count;
+                      element.cart[0].count;
 
                     itemList = {
                       id: jsonRes.id,
@@ -120,7 +141,7 @@ const ViewCart = props => {
                       pricesItems +
                       (jsonRes.custom.small -
                         (jsonRes.custom.small * jsonRes.discount) / 100) *
-                        element.cart[1].count;
+                      element.cart[1].count;
                     itemList = {
                       id: jsonRes.id,
                       name: jsonRes.name,
@@ -140,7 +161,7 @@ const ViewCart = props => {
                       pricesItems +
                       (jsonRes.custom.large -
                         (jsonRes.custom.large * jsonRes.discount) / 100) *
-                        element.cart[2].count;
+                      element.cart[2].count;
                     itemList = {
                       id: jsonRes.id,
                       name: jsonRes.name,
@@ -182,8 +203,21 @@ const ViewCart = props => {
       // error reading value
     }
   };
+
+  const onDeliveryPressed = () => {
+    setDeliveryOption("Delivery");
+    setDeliveryIsSelected(true);
+    setPickupIsSelected(false);
+  }
+
+  const onPickupPressed = () => {
+    setDeliveryOption("Pickup");
+    setPickupIsSelected(true);
+    setDeliveryIsSelected(false);
+  }
+
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <View style={styles.heading}>
         <Text style={styles.delivery}>DELIVERY AT</Text>
         <View style={styles.location}>
@@ -195,7 +229,7 @@ const ViewCart = props => {
         </View>
       </View>
       <View style={styles.arrival}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <Icon size={12} name="clock"></Icon>
           <Text style={styles.timeIcon}>Arrives under -- minutes</Text>
         </View>
@@ -207,10 +241,10 @@ const ViewCart = props => {
       <View>
         {items.map((item, index) => (
           <View style={styles.itemsCart} key={index}>
-            <View style={{flexDirection: 'row'}}>
-              <Icon style={{color: '#742013'}} size={12} name="dot-circle" />
+            <View style={{ flexDirection: 'row' }}>
+              <Icon style={{ color: '#742013' }} size={12} name="dot-circle" />
               <View>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   <Text style={styles.items}>{item.name}</Text>
                   <Text style={styles.size}>({item.size} size)</Text>
                 </View>
@@ -220,7 +254,7 @@ const ViewCart = props => {
                     ((item.price - (item.price * item.discount) / 100) *
                       item.quantity +
                       Number.EPSILON) *
-                      100,
+                    100,
                   ) / 100}
                 </Text>
               </View>
@@ -228,13 +262,13 @@ const ViewCart = props => {
 
             <View style={styles.quantity}>
               <TouchableOpacity style={styles.valuesBtn1}>
-                <Icons style={{color: '#742013'}} size={15} name="remove" />
+                <Icons style={{ color: '#742013' }} size={15} name="remove" />
               </TouchableOpacity>
               <View style={styles.numberBox}>
                 <Text style={styles.numbers}>{item.quantity}</Text>
               </View>
               <TouchableOpacity style={styles.valuesBtn2}>
-                <Icons style={{color: '#742013'}} size={15} name="add" />
+                <Icons style={{ color: '#742013' }} size={15} name="add" />
               </TouchableOpacity>
             </View>
           </View>
@@ -263,9 +297,34 @@ const ViewCart = props => {
         </View>
       </View>
 
+      <View style={styles.deliveryBox}>
+        <Text>Delivery Option:</Text>
+          <View style={{ flexDirection: "row", marginTop: 5 }}>
+            <RadioButton
+              animation={'bounceIn'}
+              isSelected={deliveryIsSelected}
+              onPress={onDeliveryPressed}
+              size={12}
+            />
+            <Text style={{ marginLeft: 5 }}>Delivery</Text>
+          </View>
+          <View style={{ flexDirection: "row", marginTop: 5 }}>
+            <RadioButton
+              animation={'bounceIn'}
+              isSelected={pickupIsSelected}
+              onPress={onPickupPressed}
+              size={12}
+            />
+            <Text style={{ marginLeft: 5 }}>Pickup</Text>
+          </View>
+      </View>
+
       <TouchableOpacity
         style={styles.button}
-        onPress={() =>
+        onPress={() => {
+          var branch_data = data;
+          branch_data.type = deliveryOption;
+          setData(branch_data);
           props.props.navigation.navigate('Payment', {
             items: items,
             branch: data,
@@ -275,6 +334,7 @@ const ViewCart = props => {
             delivery: delivery,
             totalPoints: totalPoints,
           })
+        }
         }>
         <Text style={styles.locText}>Choose Payment Method</Text>
       </TouchableOpacity>
@@ -428,4 +488,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#742013',
   },
+  deliveryBox: {
+    margin: 10,
+    borderStyle: 'dashed',
+    borderTopColor: 'grey',
+    borderTopWidth: 0.5,
+    paddingTop: 10
+  }
 });

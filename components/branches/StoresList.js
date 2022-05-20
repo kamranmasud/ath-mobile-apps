@@ -16,7 +16,7 @@ const token = 'AAAA-BBBB-CCCC-DDDD';
 // const url =
 //   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
   const url =
-    Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
+  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
 
 const headerConfig = {
   headers: {
@@ -35,7 +35,7 @@ const deleteCart = async () => {
   }
 };
 
-export class Branches extends Component {
+export class StoresList extends Component {
   constructor(props) {
     super(props);
     const { navigation } = props;
@@ -91,18 +91,15 @@ export class Branches extends Component {
         <BackNav navigation={this.props.navigation} login={false} />
         <View style={styles.branchesBox}>
           <View style={styles.mapBox}>
-            <Text style={myStyles.heading}>Stores</Text>
-            {/* <TouchableOpacity style={styles.mapBtn}>
+            <Text style={myStyles.heading}>Nearby Stores</Text>
+            <TouchableOpacity style={styles.mapBtn}>
               <Icon size={20} name="map-marked-alt" style={styles.iconMap} />
               <Text style={styles.colorMap}>Map</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
           <FlatList
             data={this.state.branches}
-            renderItem={({ item }) => <Branch branch={item}
-              navigation={this.props.navigation}
-              name={this.props.route.params.name}
-              type={this.props.route.params.type} />}
+            renderItem={({ item }) => <Branch branch={item} />}
             removeClippedSubviews={true} // Unmount components when outside of window 
             initialNumToRender={2} // Reduce initial render amount
             maxToRenderPerBatch={1} // Reduce number in each render batch
@@ -133,21 +130,21 @@ export class Branches extends Component {
 
 const Branch = (props) => {
   return (
-    <TouchableOpacity
-      key={props.branch.key}
-      onPress={() =>
-        props.navigation.navigate(props.name, {
-          name: 'AddToCart',
-          branchId: props.branch.id,
-          type: props.type,
-        })
-      }>
+    // <TouchableOpacity
+    //   key={props.branch.key}
+    //   onPress={() =>
+    //     props.navigation.navigate(props.name, {
+    //       name: 'AddToCart',
+    //       branchId: props.branch.id,
+    //       type: props.type,
+    //     })
+    //   }>
       <Stores branch={props.branch} />
-    </TouchableOpacity>
+    // </TouchableOpacity>
   )
 }
 
-export default Branches;
+export default StoresList;
 
 const styles = StyleSheet.create({
   branchesBox: {

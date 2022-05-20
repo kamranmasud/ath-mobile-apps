@@ -20,8 +20,10 @@ const Orders = props => {
   const [customer, setCustomer] = useState([]);
   const [orders, setOrders] = useState([]);
 
+  // const url =
+  //   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
   const url =
-    Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
 
   useFocusEffect(
     React.useCallback(() => {
@@ -61,6 +63,7 @@ const Orders = props => {
       .then(async resp => {
         try {
           const jsonResp = await resp.json();
+          // alert(JSON.stringify(jsonResp));
           if (resp.status !== 200) {
             Alert.alert('Error', 'Data could not be fetched!', [
               {
@@ -85,6 +88,7 @@ const Orders = props => {
       });
   };
   const getPayments = order => {
+    console.log(order.id);
     fetch(`${url}/get/payment/order/${order.id}`, {
       method: 'GET',
       headers: {
@@ -152,23 +156,24 @@ const Orders = props => {
               {/* <Text style={styles.info}>AED </Text> */}
               <Text style={styles.info}>Txn ID: {order.id}</Text>
               <Text style={styles.info}>Branch: {order.branch.name}</Text>
+              <Text style={styles.status}>Status: {order.status}</Text>
               {/* <Rating
-          type="custom"
-          startingValue={0}
-          ratingCount={5}
-          ratingColor="grey"
-          imageSize={25}
-          ratingTextColor="grey"
-          onFinishRating={ratingCompleted}
-          style={{alignSelf: 'flex-start'}}
-        /> */}
-              <View style={{flexDirection: 'row'}}>
+                type="custom"
+                startingValue={0}
+                ratingCount={5}
+                ratingColor="grey"
+                imageSize={25}
+                ratingTextColor="grey"
+                onFinishRating={ratingCompleted}
+                style={{alignSelf: 'flex-start'}}
+              /> */}
+              {/* <View style={{flexDirection: 'row'}}>
                 <Icon name="star" size={25} style={{marginRight: 2}} />
                 <Icon name="star" size={25} style={{marginRight: 2}} />
                 <Icon name="star" size={25} style={{marginRight: 2}} />
                 <Icon name="star" size={25} style={{marginRight: 2}} />
                 <Icon name="star" size={25} style={{marginRight: 2}} />
-              </View>
+              </View> */}
             </TouchableOpacity>
           ))
         : null}
@@ -223,4 +228,7 @@ const styles = StyleSheet.create({
   info: {
     marginBottom: 5,
   },
+  status: {
+    fontWeight: "bold"
+  }
 });

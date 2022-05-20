@@ -33,8 +33,10 @@ const Reservation = props => {
   const [seats, setSeats] = useState(null);
   const [customer, setCustomer] = useState(null);
 
+  // const url =
+  //   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
   const url =
-    Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
 
   const getData = async () => {
     try {
@@ -99,10 +101,11 @@ const Reservation = props => {
     // console.log(time);
     // console.log(seats);
     // console.log(props.route.params.branchId);
-    var phoneno = /^\d{10}$/;
+    var phoneno = /^\d{13}$/;
+    var phoneno1 = /^\d{12}$/;
     if (name !== '') {
       if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-        if (formattedValue.match(phoneno)) {
+        if (formattedValue.match(phoneno) || formattedValue.match(phoneno1)) {
           if (time !== '') {
             if (/^\d{1,2}$/.test(seats)) {
               let order = {

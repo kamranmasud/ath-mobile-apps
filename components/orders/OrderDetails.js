@@ -13,8 +13,10 @@ const OrderDetails = props => {
   //const [payment, setPayment] = useState(props.route.params.payment);
   const [token, setToken] = useState('');
   const [branch, setBranch] = useState([]);
+  // const url =
+  //   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
   const url =
-    Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
 
   useFocusEffect(
     React.useCallback(() => {
@@ -106,6 +108,12 @@ const OrderDetails = props => {
             </View>
           </View>
         </View>
+        <View style={styles.boxesRow} height={30}>
+          <View style={styles.rows}>
+            <Text style={detailStyles.headings}>Status</Text>
+            <Text style={detailStyles.prices}>{order.status}</Text>
+          </View>
+        </View>
         <View style={styles.boxesRow}>
           <View style={styles.rows}>
             <Text style={detailStyles.bill}>Total Bill Value</Text>
@@ -150,10 +158,10 @@ const OrderDetails = props => {
           </View>
         </View>
       </View>
-      <View style={styles.feedback}>
+      {/* <View style={styles.feedback}>
         <Text style={detailStyles.feedback}>Feedback</Text>
         <Ratings />
-      </View>
+      </View> */}
     </View>
   );
 };

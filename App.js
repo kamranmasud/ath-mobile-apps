@@ -27,6 +27,8 @@ import Working from './components/rewards/Working';
 import HistoryCredit from './components/rewards/HistoryCredit';
 import TransferCredit from './components/rewards/TransferCredit';
 import Customization from './components/cart/Customization';
+import StoresList from './components/branches/StoresList';
+import ChangePassword from './components/profile/ChangePassword';
 
 const Stack = createNativeStackNavigator();
 export class App extends Component {
@@ -65,8 +67,18 @@ export class App extends Component {
               options={{headerShown: false}}
             />
             <Stack.Screen
+              name="Change Password"
+              component={ChangePassword}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
               name="Branches"
               component={Branches}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Stores"
+              component={StoresList}
               options={{headerShown: false}}
             />
             <Stack.Screen

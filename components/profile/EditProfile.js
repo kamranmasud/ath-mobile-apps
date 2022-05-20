@@ -26,7 +26,7 @@ const EditProfile = props => {
         </TouchableOpacity>
       </View>
       <View>
-        <UpdateDetails />
+        <UpdateDetails navigation={props.navigation} />
       </View>
     </View>
   );

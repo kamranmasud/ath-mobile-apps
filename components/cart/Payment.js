@@ -20,8 +20,10 @@ const Payment = props => {
   const [token, setToken] = useState('');
   const {customer, branch, items, instructions, total, delivery, totalPoints} =
     props.route.params;
+  // const url =
+  //   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
   const url =
-    Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
 
   useFocusEffect(
     React.useCallback(() => {
@@ -358,12 +360,12 @@ const Payment = props => {
           </TouchableOpacity>
           <Text> Cash</Text>
         </View>
-        <View style={{flexDirection: 'row', margin: 10}}>
+        {/* <View style={{flexDirection: 'row', margin: 10}}>
           <TouchableOpacity style={styles.outer} onPress={() => isCard()}>
             {card ? <View style={styles.inner} /> : null}
           </TouchableOpacity>
           <Text> Card</Text>
-        </View>
+        </View> */}
         <View style={{flexDirection: 'row', margin: 10}}>
           <TouchableOpacity style={styles.outer} onPress={() => isPoints()}>
             {points ? <View style={styles.inner} /> : null}

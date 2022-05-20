@@ -5,10 +5,10 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {useIsFocused, useFocusEffect} from '@react-navigation/native';
+import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import PhoneNumber from '../login/PhoneNumber';
@@ -20,7 +20,7 @@ const UpdateDetails = props => {
   const [show, setShow] = useState(false);
   const [text, setText] = useState('');
   const [customer, setCustomer] = useState('');
-  const [date, setDate] = useState(customer.dob);
+  const [date, setDate] = useState(customer?.dob);
   const [token, setToken] = useState('');
 
   const phoneInput = useRef(<PhoneInput></PhoneInput>);
@@ -31,8 +31,10 @@ const UpdateDetails = props => {
   const [phone, setPhone] = useState('');
   const [time, setTime] = useState('00:00');
   const [dateTime, setDateTime] = useState(new Date());
+  // const url =
+  //   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
   const url =
-    Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+    Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
 
   useFocusEffect(
     React.useCallback(() => {
@@ -49,28 +51,53 @@ const UpdateDetails = props => {
   );
   const getData = async () => {
     try {
+      var url = "https://ath-restapi.herokuapp.com";
+
       const value = await AsyncStorage.getItem('customer');
-      console.log(value);
+
       if (value !== null) {
         let data = JSON.parse(value);
-        console.log(data);
-        setCustomer(data.cust);
-        setToken(data.accessToken);
-        setName(data.cust.name);
-        setEmail(data.cust.email);
-        setPhone(data.cust.phone);
-        setText(data.cust.phone);
-        console.log(phone);
-        let dob = new Date(data.cust.dob);
-        let fullDate =
-          dob.getDate() + '/' + dob.getMonth() + '/' + dob.getFullYear();
-        console.log(fullDate);
-        setDate(fullDate);
-        console.log(date);
-        //return value;
+
+        axios
+          .get(url + "/get/customer/" + data.cust._id)
+          .then(response => {
+            setCustomer(response.data);
+            setName(response.data.name);
+            setEmail(response.data.email);
+            setPhone(response.data.phone);
+            setText(response.data.phone);
+            let dob = new Date(response.data.dob);
+            let fullDate = dob.getDate() + '/' + dob.getMonth() + '/' + dob.getFullYear();
+            setDate(fullDate);
+          })
+          .catch(error => {
+            console.log(error);
+          });
         // value previously stored
-      } else {
       }
+
+      // const value = await AsyncStorage.getItem('customer');
+      // console.log(value);
+      // if (value !== null) {
+      //   let data = JSON.parse(value);
+      //   console.log(data);
+      //   setCustomer(data.cust);
+      //   setToken(data.accessToken);
+      //   setName(data.cust?.name);
+      //   setEmail(data.cust?.email);
+      //   setPhone(data.cust?.phone);
+      //   setText(data.cust?.phone);
+      //   console.log(phone);
+      //   let dob = new Date(data.cust?.dob);
+      //   let fullDate =
+      //     dob.getDate() + '/' + dob.getMonth() + '/' + dob.getFullYear();
+      //   console.log(fullDate);
+      //   setDate(fullDate);
+      //   console.log(date);
+      //   //return value;
+      //   // value previously stored
+      // } else {
+      // }
     } catch (e) {
       console.log(e);
       //return false;
@@ -109,52 +136,53 @@ const UpdateDetails = props => {
   };
 
   function updateCustomer() {
-    var phoneno = /^\d{10}$/;
+    var phoneno = /^\d{13}$/;
+    var phoneno1 = /^\d{12}$/;
     if (name !== '') {
       if (date !== null) {
         console.log(formattedValue);
-        if (formattedValue.match(phoneno)) {
-          let cust = {
-            email: email,
-            phoneNumber: formattedValue,
-            name: name,
-            dob: date,
-          };
-          fetch(`${url}/customer/update/${customer.id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(cust),
-          })
-            .then(async res => {
-              try {
-                const jsonRes = await res.json();
-                if (res.status !== 200) {
-                  Alert.alert('Error', 'Unable to update', [
-                    {
-                      text: 'Cancel',
-                      onPress: () => console.log('Cancel Pressed'),
-                      style: 'cancel',
-                    },
-                    {text: 'OK', onPress: () => console.log('OK Pressed')},
-                  ]);
-                } else {
-                  console.log(jsonRes);
-                  storeData(jsonRes);
-                  //props.navigation.navigate('ViewProfile');
-                }
-              } catch (err) {
-                console.log(err);
+        // if (formattedValue.match(phoneno) || formattedValue.match(phoneno1)) {
+        let cust = {
+          // email: email,
+          // phoneNumber: formattedValue,
+          name: name,
+          // dob: date,
+        };
+        fetch(`${url}/customer/update/${customer.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(cust),
+        })
+          .then(async res => {
+            try {
+              const jsonRes = await res.json();
+              if (res.status !== 200) {
+                Alert.alert('Error', 'Unable to update', [
+                  {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                  },
+                  { text: 'OK', onPress: () => console.log('OK Pressed') },
+                ]);
+              } else {
+                console.log(jsonRes);
+                storeData(jsonRes);
+                //props.navigation.navigate('ViewProfile');
               }
-            })
-            .catch(err => {
+            } catch (err) {
               console.log(err);
-            });
-        } else {
-          alert('Invalid Phone Number!');
-        }
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        // } else {
+        //   alert('Invalid Phone Number!');
+        // }
       } else alert('Invalid Date of Birth!');
     } else alert('Enter you name!');
   }
@@ -166,16 +194,17 @@ const UpdateDetails = props => {
         value={name}
         style={styles.input}
         placeholder="Enter your full Name"
-        //keyboardType="str"
+        onChangeText={(name) => setName(name)}
+      //keyboardType="str"
       />
-      <Text style={styles.labels}>Email Address</Text>
+      {/* <Text style={styles.labels}>Email Address</Text>
       <TextInput
         value={email}
         style={styles.input}
         placeholder="Enter your email address"
         //keyboardType="str"
-      />
-      <Text style={styles.labels}>Phone Number</Text>
+      /> */}
+      {/* <Text style={styles.labels}>Phone Number</Text>
       <PhoneInput
         ref={phoneInput}
         defaultValue={phone}
@@ -195,26 +224,28 @@ const UpdateDetails = props => {
         textContainerStyle={styles.picker}
         textInputStyle={styles.numText}
         //autoFocus
-      />
+      /> */}
       <Text style={styles.labels}>Date of Birth</Text>
-      <View style={styles.inputBox}>
+      {/* <View style={styles.inputBox}>
         <TextInput
           style={styles.dateBox}
           //onChangeText={onChangePin1}
           value={date}
           placeholder="Select Date of Birth"
           keyboardType="numeric"
+          onChangeText={(date) => setDate(date)}
         />
         <TouchableOpacity title="DatePicker" onPress={() => showMode('date')}>
           <Icon style={styles.icon} name="date-range" size={20}></Icon>
         </TouchableOpacity>
-      </View>
-      <TouchableOpacity style={styles.password}>
-        <Text style={styles.textPswd}>Change Password</Text>
-        <Icon name="arrow-right" size={30} color={'#742013'} />
-      </TouchableOpacity>
+      </View> */}
       <TouchableOpacity style={styles1.button} onPress={() => updateCustomer()}>
         <Text style={styles1.continue}>SAVE</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.password}
+        onPress={() => props.navigation.navigate("Change Password")}>
+        <Text style={styles.textPswd}>Change Password</Text>
+        <Icon name="arrow-right" size={30} color={'#742013'} />
       </TouchableOpacity>
       {show && (
         <DateTimePicker
@@ -229,8 +260,6 @@ const UpdateDetails = props => {
     </View>
   );
 };
-
-export default UpdateDetails;
 
 const styles = StyleSheet.create({
   box: {
@@ -261,7 +290,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 1,
     borderColor: '#e5e4e2',
-    paddingLeft: 15,
+    paddingLeft: 15
   },
   labels: {
     marginTop: 15,
@@ -312,3 +341,5 @@ const styles = StyleSheet.create({
     color: 'grey',
   },
 });
+
+export default UpdateDetails;

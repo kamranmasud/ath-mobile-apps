@@ -7,8 +7,10 @@ import PopNav from '../PopNav';
 const Working = props => {
   const {navigation} = props;
   const [work, setWork] = useState('');
+  // const url =
+  //   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
   const url =
-    Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
 
   useFocusEffect(
     React.useCallback(() => {

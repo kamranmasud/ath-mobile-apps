@@ -21,8 +21,10 @@ const width = dimensions.width;
 const dimHeight = dimensions.height;
 const height = width * 0.7;
 const token = 'AAAA-BBBB-CCCC-DDDD';
-const url =
-  Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+// const url =
+//   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+  const url =
+  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
 
 export class Login extends Component {
   constructor(props) {

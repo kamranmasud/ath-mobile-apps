@@ -24,8 +24,10 @@ const widthImg = width - 40;
 const height = width * 0.5;
 //const url = 'http://localhost:5000';
 const token = 'AAAA-BBBB-CCCC-DDDD';
-const url =
-  Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+// const url =
+//   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+  const url =
+  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
 
 const headerConfig = {
   headers: {
@@ -144,7 +146,7 @@ export class Landing extends Component {
             />
           </View>
           <PurchaseOptions navigation={this.props.navigation} />
-          <Menu />
+          <Menu navigation={this.props.navigation} />
         </ScrollView>
         <Navigations navigation={this.props.navigation} />
       </View>

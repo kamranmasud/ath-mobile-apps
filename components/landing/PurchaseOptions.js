@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect } from 'react';
 import {
   View,
   Text,
@@ -19,8 +20,10 @@ const PurchaseOptions = props => {
       <Text style={styles.text}>How would you like to get your purchase?</Text>
       <View style={styles.optionsView}>
         <TouchableOpacity
-          onPress={() =>
+          onPress={() => {
+            global.DELIVERY_OPTION = "Dine in";
             props.navigation.navigate('Branches', {name: 'DineIn'})
+          }
           }
           style={styles.optionsIcons}>
           <View style={styles.options}>
@@ -33,11 +36,13 @@ const PurchaseOptions = props => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.optionsIcons}
-          onPress={() =>
+          onPress={() => {
+            global.DELIVERY_OPTION = "Delivery";
             props.navigation.navigate('Branches', {
               name: 'Categories',
               type: 'Delivery',
             })
+          }
           }>
           <View style={styles.options}>
             <Icon2
@@ -50,11 +55,13 @@ const PurchaseOptions = props => {
 
         <TouchableOpacity
           style={styles.optionsIcons}
-          onPress={() =>
+          onPress={() => {
+            global.DELIVERY_OPTION = "Pickup";
             props.navigation.navigate('Branches', {
               name: 'Categories',
               type: 'Pickup',
-            })
+            });
+          }
           }>
           <View style={styles.options}>
             <Icon2
@@ -66,8 +73,10 @@ const PurchaseOptions = props => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() =>
+          onPress={() => {
+            global.DELIVERY_OPTION = "Reservation";
             props.navigation.navigate('Branches', {name: 'Reservation'})
+          }
           }
           style={styles.optionsIcons}>
           <View style={styles.options}>

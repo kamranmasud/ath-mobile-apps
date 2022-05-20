@@ -14,8 +14,10 @@ const Items = props => {
   const [token, setToken] = useState('');
   //const token = 'AAAA-BBBB-CCCC-DDDD';
 
+  // const url =
+  //   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
   const url =
-    Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
   useEffect(() => {
     getCart();
     return () => console.log('unmounting...');

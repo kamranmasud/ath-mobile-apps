@@ -20,8 +20,10 @@ const {height} = Dimensions.get('window');
 const heightScr = height * 0.8;
 const token = 'AAAA-BBBB-CCCC-DDDD';
 var length = 0;
-const url =
-  Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+// const url =
+//   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+  const url =
+  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
 const getCart = async () => {
   try {
     const value = await AsyncStorage.getItem('cart');
@@ -144,7 +146,7 @@ export class AddToCart extends Component {
         </View>
         <View style={styles.bottom}>
           <View style={styles.itemsCart}>
-            <Text style={styles.priceColor}>{length} Items Selected</Text>
+            {/* <Text style={styles.priceColor}>{length} Items Selected</Text> */}
             {/* <Text style={styles.selectedColor}>AED 00.00</Text> */}
           </View>
           <TouchableOpacity

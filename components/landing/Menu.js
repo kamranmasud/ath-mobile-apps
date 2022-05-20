@@ -6,25 +6,32 @@ import {
   Text,
   View,
   Dimensions,
+  TouchableOpacity
 } from 'react-native';
 
 const {width} = Dimensions.get('window');
 const widthBox = width / 2 - 30;
 //const height = width * 0.5;
 
-const Menu = () => {
+const Menu = (props) => {
   return (
     <View style={styles.menu}>
       <Text style={styles.text}>Our Menu</Text>
       <View style={styles.menuOptions}>
-        <View style={styles.menuBox}>
+        <TouchableOpacity
+          onPress={() => {
+            global.DELIVERY_OPTION = "Menu";
+            props.navigation.navigate('Branches', {name: 'Menu'})
+          }
+          }
+          style={styles.menuBox}>
           <Image
             style={styles.images}
             source={{
               uri: 'https://images.pexels.com/photos/675951/pexels-photo-675951.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
             }}></Image>
           <Text style={styles.menuText}>Menu</Text>
-        </View>
+        </TouchableOpacity>
         <View style={styles.menuBox}>
           <Image
             style={styles.images}

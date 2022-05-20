@@ -100,13 +100,14 @@ const headerStyles = StyleSheet.create({
   header: {
     height: 60,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly'
+    // justifyContent: 'space-between',
   },
   heading: {
     height: 60,
     width: 200,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   image: {
     width: 45,
@@ -116,7 +117,7 @@ const headerStyles = StyleSheet.create({
     width: 60,
     height: 60,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   navToggle: {
     width: 60,
@@ -127,7 +128,7 @@ const headerStyles = StyleSheet.create({
   text: {
     color: '#742013',
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 14
   },
   loginBtn: {
     //margin: 5,

@@ -25,8 +25,10 @@ const TransferCredit = props => {
   const [phone, setPhone] = useState('');
   const [amount, setAmount] = useState('');
   const [id, setId] = useState('');
+  // const url =
+  //   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
   const url =
-    Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
   useFocusEffect(
     React.useCallback(() => {
       async function getCustomer() {
@@ -45,7 +47,8 @@ const TransferCredit = props => {
     }, []),
   );
   const transfer = () => {
-    var phoneno = /^\d{10}$/;
+    var phoneno = /^\d{13}$/;
+    var phoneno1 = /^\d{12}$/;
     let value = false;
     console.log(email);
     console.log(phone);
@@ -89,7 +92,7 @@ const TransferCredit = props => {
           });
         }, 2000);
       }
-      if (formattedValue.match(phoneno)) {
+      if (formattedValue.match(phoneno) || formattedValue.match(phoneno1)) {
         const promise2 = fetch(`${url}/get/customer/phone/${formattedValue}`, {
           method: 'GET',
           headers: {

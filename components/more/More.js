@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
 
 const More = props => {
-  const displayList = [
+  const displayListLoggedIn = [
     {text: 'My Profile', nav: 'ViewProfile'},
     {text: 'My Orders', nav: 'Orders'},
     {text: 'Favourites', nav: ''},
@@ -17,13 +17,22 @@ const More = props => {
     {text: 'Terms & Conditions', nav: ''},
     {text: 'Ver 1.0.0', nav: ''},
   ];
-  const [log, setLog] = useState(true);
+  const displayListLoggedOut = [
+    {text: 'News', nav: ''},
+    {text: 'About Us', nav: ''},
+    {text: 'Contact Us', nav: ''},
+    {text: 'FAQ', nav: ''},
+    {text: 'Terms & Conditions', nav: ''},
+    {text: 'Ver 1.0.0', nav: ''},
+  ];
+  const [log, setLog] = useState(false);
   function navigatePages(nav, name) {
     nav.navigate(name);
   }
 
   useFocusEffect(
     React.useCallback(() => {
+      getData();
       setTimeout(() => {
         getData();
       }, 1000);
@@ -49,7 +58,7 @@ const More = props => {
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem('customer');
-      console.log(value);
+      // console.log(value);
       if (value !== null) {
         setLog(true);
       } else {
@@ -69,14 +78,26 @@ const More = props => {
   }
   return (
     <View style={styles.box}>
-      {displayList.map((item, index) => (
-        <TouchableOpacity
-          key={index}
-          style={styles.items}
-          onPress={() => navigatePages(props.navigation, item.nav)}>
-          <Text style={styles.itemText}>{item.text}</Text>
-        </TouchableOpacity>
-      ))}
+      {
+        log ?
+        displayListLoggedIn.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.items}
+            onPress={() => navigatePages(props.navigation, item.nav)}>
+            <Text style={styles.itemText}>{item.text}</Text>
+          </TouchableOpacity>
+        ))
+        :
+        displayListLoggedOut.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.items}
+            onPress={() => navigatePages(props.navigation, item.nav)}>
+            <Text style={styles.itemText}>{item.text}</Text>
+          </TouchableOpacity>
+        ))
+      }
       {log ? (
         <TouchableOpacity style={styles.logoutBtn}>
           <Text style={styles.logout} onPress={() => logout()}>

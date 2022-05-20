@@ -51,8 +51,10 @@ const Signup = props => {
   const [pin3, setPin3] = useState();
   const [pin4, setPin4] = useState();
 
+  // const url =
+  //   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
   const url =
-    Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
+  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
 
   const storeData = async value => {
     try {
@@ -142,14 +144,15 @@ const Signup = props => {
   function register() {
     let password1 = val1 + val2 + val3 + val4;
     let password2 = pin1 + pin2 + pin3 + pin4;
-    var phoneno = /^\d{10}$/;
+    var phoneno = /^\d{13}$/;
+    var phoneno1 = /^\d{12}$/;
 
     if (password1 === password2) {
       setMatch(true);
       console.log(password1, password2);
       if (date !== null) {
         console.log(formattedValue);
-        if (formattedValue.match(phoneno)) {
+        if (formattedValue.match(phoneno) || formattedValue.match(phoneno1)) {
           let cust = {
             email: email,
             phoneNumber: formattedValue,
