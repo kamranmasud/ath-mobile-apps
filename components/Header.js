@@ -127,7 +127,7 @@ const headerStyles = StyleSheet.create({
   text: {
     color: '#742013',
     fontWeight: 'bold',
-    fontSize: 14
+    fontSize: 13
   },
   loginBtn: {
     //margin: 5,
