@@ -18,7 +18,7 @@ const Payment = props => {
   const [rewards, setRewards] = useState(0);
   const [currency, setCurrency] = useState(0);
   const [token, setToken] = useState('');
-  const {customer, branch, items, instructions, total, delivery, totalPoints} =
+  const {customer, branch, items, instructions, total, delivery, totalPoints, address} =
     props.route.params;
   // const url =
   //   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
@@ -232,6 +232,7 @@ const Payment = props => {
                   status: false,
                   deliveryFee: delivery,
                   netAmount: total + delivery,
+                  address: address
                 };
                 fetch(`${url}/add/payment`, {
                   method: 'POST',
@@ -268,6 +269,7 @@ const Payment = props => {
                           order: orderD,
                           payment: jsonResp,
                           items: itemD,
+                          address: address
                         });
                       }
                     } catch (err) {
