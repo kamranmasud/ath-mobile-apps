@@ -14,7 +14,7 @@ const BackNav = props => {
     else {
       return (
         <View>
-          <Text style={styles.loc}>My Location</Text>
+          {/* <Text style={styles.loc}>My Location</Text> */}
           <Text style={styles.textLoc}>{location}</Text>
         </View>
       );
