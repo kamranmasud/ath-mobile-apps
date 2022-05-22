@@ -29,6 +29,7 @@ import TransferCredit from './components/rewards/TransferCredit';
 import Customization from './components/cart/Customization';
 import StoresList from './components/branches/StoresList';
 import ChangePassword from './components/profile/ChangePassword';
+import AddressForm from './components/AddressForm';
 
 const Stack = createNativeStackNavigator();
 export class App extends Component {
@@ -129,6 +130,11 @@ export class App extends Component {
             <Stack.Screen
               name="EditProfile"
               component={EditProfile}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="AddAddress"
+              component={AddressForm}
               options={{headerShown: false}}
             />
             <Stack.Screen
