@@ -1,11 +1,11 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useIsFocused, useFocusEffect} from '@react-navigation/native';
+import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Items = props => {
-  const {items, branch, navigation} = props;
+  const { items, branch, navigation } = props;
   //const {branch} = props;
   const [count, setCount] = useState(0);
   const [isOrder, setIsOrder] = useState(false);
@@ -17,14 +17,14 @@ const Items = props => {
   // const url =
   //   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
   const url =
-  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
+    Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
   useEffect(() => {
     getCart();
     return () => console.log('unmounting...');
   }, []);
   useFocusEffect(
     React.useCallback(() => {
-      console.log(props.branch);
+      // console.log(props.branch);
       // Do something when the screen is focused
       //deleteCart();
       getData();
@@ -109,10 +109,17 @@ const Items = props => {
         if (c === 0) {
           let save = {
             item: items.id,
+            id: items.id,
+            name: items.name,
+            price: items.price,
+            discount: items.discount,
+            size: 'standard',
+            quantity: 1,
+            points: items.points,
             cart: [
-              {count: 1, size: 'standard'},
-              {count: 0, size: 'small'},
-              {count: 0, size: 'large'},
+              { count: 1, size: 'standard' },
+              { count: 0, size: 'small' },
+              { count: 0, size: 'large' },
             ],
           };
           data.push(save);
@@ -126,10 +133,17 @@ const Items = props => {
         let save = [
           {
             item: items.id,
+            id: items.id,
+            name: items.name,
+            price: items.price,
+            discount: items.discount,
+            size: 'standard',
+            quantity: 1,
+            points: items.points,
             cart: [
-              {count: 1, size: 'standard'},
-              {count: 0, size: 'small'},
-              {count: 0, size: 'large'},
+              { count: 1, size: 'standard' },
+              { count: 0, size: 'small' },
+              { count: 0, size: 'large' },
             ],
           },
         ];
@@ -212,11 +226,11 @@ const Items = props => {
 
   return (
     <View style={styles.stores}>
-      <Image source={{uri: items.image}} style={styles.images} />
+      <Image source={{ uri: items.image }} style={styles.images} />
       <View style={styles.infoBox}>
         <Text style={styles.productName}>{items.name}</Text>
         {props.bundles ? (
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <Text style={styles.bundledText}>AED {items.price}</Text>
             <Text style={styles.bundledPrice}>
               AED {items.price - (items.price * items.discount) / 100}
@@ -239,7 +253,7 @@ const Items = props => {
             <TouchableOpacity
               style={styles.valuesBtn1}
               onPress={() => subtractCounter()}>
-              <Icon style={{color: '#742013'}} size={15} name="remove" />
+              <Icon style={{ color: '#742013' }} size={15} name="remove" />
             </TouchableOpacity>
             <View style={styles.numberBox}>
               <Text style={styles.numbers}>{count}</Text>
@@ -247,7 +261,7 @@ const Items = props => {
             <TouchableOpacity
               style={styles.valuesBtn2}
               onPress={() => addCounter()}>
-              <Icon style={{color: '#742013'}} size={15} name="add" />
+              <Icon style={{ color: '#742013' }} size={15} name="add" />
             </TouchableOpacity>
           </View>
         )}

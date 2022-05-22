@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   TextInput,
+  ActivityIndicator
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Icons from 'react-native-vector-icons/MaterialIcons';
@@ -14,6 +15,7 @@ import RadioButton from 'react-native-radio-button';
 
 const ViewCart = props => {
   //const {props} = props
+  const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [instructions, setInstructions] = useState('');
   const [total, setTotal] = useState(0);
@@ -29,7 +31,7 @@ const ViewCart = props => {
   // const url =
   //   Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://10.0.2.2:5000';
   const url =
-  Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
+    Platform.OS === 'ios' ? 'https://ath-restapi.herokuapp.com' : 'https://ath-restapi.herokuapp.com';
   useEffect(() => {
     setTotal(0);
     getCart();
@@ -47,14 +49,14 @@ const ViewCart = props => {
         setPickupIsSelected(true);
       }
     }
-    
+
     return () => console.log('unmounting...');
   }, []);
   useFocusEffect(
     React.useCallback(() => {
       // Do something when the screen is focused
       //setItems([]);
-      console.log(props.props.route.params.type);
+      // console.log(props.props.route.params.type);
       setTotal(0);
       getCart();
       console.log('Focused');
@@ -92,110 +94,139 @@ const ViewCart = props => {
     var rounded;
     try {
       const value = await AsyncStorage.getItem('cart');
-      //console.log(value);
+      // console.log(value);
       if (value !== null) {
         let data = JSON.parse(value);
-        console.log(data);
+        // console.log(data);
         //setTotal(0);
         //total = 0;
-        const promise = data.map(element => {
-          fetch(`${url}/get/menu/items/${element.item}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          })
-            .then(async res => {
-              try {
-                let itemList;
-                const jsonRes = await res.json();
-                if (res.status === 200) {
-                  //console.log(element.cart[0].count);
-                  if (element.cart[0].count > 0) {
-                    console.log(element.cart[0].count);
-                    pricesItems =
-                      pricesItems +
-                      (jsonRes.price -
-                        (jsonRes.price * jsonRes.discount) / 100) *
-                      element.cart[0].count;
 
-                    itemList = {
-                      id: jsonRes.id,
-                      name: jsonRes.name,
-                      price: jsonRes.price,
-                      discount: jsonRes.discount,
-                      size: 'standard',
-                      quantity: element.cart[0].count,
-                      points: jsonRes.points,
-                    };
-                    arr.push(itemList);
-                    rewardsPoints =
-                      rewardsPoints + jsonRes.points * element.cart[0].count;
-
-                    //console.log(arr);
-                  }
-                  if (element.cart[1].count > 0) {
-                    console.log(element.cart[1].count);
-                    pricesItems =
-                      pricesItems +
-                      (jsonRes.custom.small -
-                        (jsonRes.custom.small * jsonRes.discount) / 100) *
-                      element.cart[1].count;
-                    itemList = {
-                      id: jsonRes.id,
-                      name: jsonRes.name,
-                      price: jsonRes.custom.small,
-                      discount: jsonRes.discount,
-                      size: 'small',
-                      quantity: element.cart[1].count,
-                      points: jsonRes.points,
-                    };
-                    arr.push(itemList);
-                    rewardsPoints =
-                      rewardsPoints + jsonRes.points * element.cart[1].count;
-                  }
-                  if (element.cart[2].count > 0) {
-                    console.log(element.cart[2].count);
-                    pricesItems =
-                      pricesItems +
-                      (jsonRes.custom.large -
-                        (jsonRes.custom.large * jsonRes.discount) / 100) *
-                      element.cart[2].count;
-                    itemList = {
-                      id: jsonRes.id,
-                      name: jsonRes.name,
-                      price: jsonRes.custom.large,
-                      discount: jsonRes.discount,
-                      size: 'large',
-                      quantity: element.cart[2].count,
-                      points: jsonRes.points,
-                    };
-                    arr.push(itemList);
-                    rewardsPoints =
-                      rewardsPoints + jsonRes.points * element.cart[2].count;
-                  }
-                  console.log(items);
-                }
-              } catch (err) {
-                console.log(err);
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        });
-        setTimeout(() => {
-          Promise.all(promise).then(function () {
-            setItems(arr);
-            console.log(items);
-            pricesItems =
-              Math.round((pricesItems + Number.EPSILON) * 100) / 100;
-            console.log(pricesItems);
-            setTotal(pricesItems);
-            setTotalPoints(rewardsPoints);
+        data.map(element => {
+          arr.push({
+            id: element.item,
+            name: element.name,
+            price: element.price,
+            discount: element.discount,
+            size: 'standard',
+            quantity: element.cart[0].count,
+            points: element.points,
           });
-        }, 1000);
+          pricesItems =
+            pricesItems +
+            (element.price -
+              (element.price * element.discount) / 100) *
+            element.cart[0].count;
+
+          rewardsPoints =
+            rewardsPoints + element.points * element.cart[0].count;
+        });
+        setItems(arr);
+        pricesItems =
+          Math.round((pricesItems + Number.EPSILON) * 100) / 100;
+        setTotal(pricesItems);
+        setTotalPoints(rewardsPoints);
+
+        // const promise = data.map(element => {
+        //   setLoading(true);
+        //   fetch(`${url}/get/menu/items/${element.item}`, {
+        //     method: 'GET',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //       Authorization: `Bearer ${token}`,
+        //     },
+        //   })
+        //     .then(async res => {
+        //       try {
+        //         let itemList;
+        //         const jsonRes = await res.json();
+        //         if (res.status === 200) {
+        //           //console.log(element.cart[0].count);
+        //           if (element.cart[0].count > 0) {
+        //             // console.log(element.cart[0].count);
+        //             pricesItems =
+        //               pricesItems +
+        //               (jsonRes.price -
+        //                 (jsonRes.price * jsonRes.discount) / 100) *
+        //               element.cart[0].count;
+
+        //             itemList = {
+        //               id: jsonRes.id,
+        //               name: jsonRes.name,
+        //               price: jsonRes.price,
+        //               discount: jsonRes.discount,
+        //               size: 'standard',
+        //               quantity: element.cart[0].count,
+        //               points: jsonRes.points,
+        //             };
+        //             arr.push(itemList);
+        //             setItems([...items, itemList]);
+        //             rewardsPoints =
+        //               rewardsPoints + jsonRes.points * element.cart[0].count;
+
+        //             //console.log(arr);
+        //           }
+        //           if (element.cart[1].count > 0) {
+        //             // console.log(element.cart[1].count);
+        //             pricesItems =
+        //               pricesItems +
+        //               (jsonRes.custom.small -
+        //                 (jsonRes.custom.small * jsonRes.discount) / 100) *
+        //               element.cart[1].count;
+        //             itemList = {
+        //               id: jsonRes.id,
+        //               name: jsonRes.name,
+        //               price: jsonRes.custom.small,
+        //               discount: jsonRes.discount,
+        //               size: 'small',
+        //               quantity: element.cart[1].count,
+        //               points: jsonRes.points,
+        //             };
+        //             arr.push(itemList);
+        //             rewardsPoints =
+        //               rewardsPoints + jsonRes.points * element.cart[1].count;
+        //           }
+        //           if (element.cart[2].count > 0) {
+        //             // console.log(element.cart[2].count);
+        //             pricesItems =
+        //               pricesItems +
+        //               (jsonRes.custom.large -
+        //                 (jsonRes.custom.large * jsonRes.discount) / 100) *
+        //               element.cart[2].count;
+        //             itemList = {
+        //               id: jsonRes.id,
+        //               name: jsonRes.name,
+        //               price: jsonRes.custom.large,
+        //               discount: jsonRes.discount,
+        //               size: 'large',
+        //               quantity: element.cart[2].count,
+        //               points: jsonRes.points,
+        //             };
+        //             arr.push(itemList);
+        //             rewardsPoints =
+        //               rewardsPoints + jsonRes.points * element.cart[2].count;
+        //           }
+        //           setLoading(false);
+        //           // console.log(items);
+        //         }
+        //       } catch (err) {
+        //         console.log(err);
+        //       }
+        //     })
+        //     .catch(err => {
+        //       console.log(err);
+        //     });
+        // });
+        // setTimeout(() => {
+        //   Promise.all(promise).then(function () {
+        //     // setItems(arr);
+        //     console.log(items);
+        //     pricesItems =
+        //       Math.round((pricesItems + Number.EPSILON) * 100) / 100;
+        //     // console.log(pricesItems);
+        //     setTotal(pricesItems);
+        //     setTotalPoints(rewardsPoints);
+        //   });
+        // }, 1000);
       } else {
       }
     } catch (e) {
@@ -233,46 +264,51 @@ const ViewCart = props => {
           <Icon size={12} name="clock"></Icon>
           <Text style={styles.timeIcon}>Arrives under -- minutes</Text>
         </View>
-        <TouchableOpacity style={styles.schedule}>
+        {/* <TouchableOpacity style={styles.schedule}>
           <Text style={styles.locText}>Schedule Time</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <View>
-        {items.map((item, index) => (
-          <View style={styles.itemsCart} key={index}>
-            <View style={{ flexDirection: 'row' }}>
-              <Icon style={{ color: '#742013' }} size={12} name="dot-circle" />
-              <View>
-                <View style={{ flexDirection: 'row' }}>
-                  <Text style={styles.items}>{item.name}</Text>
-                  <Text style={styles.size}>({item.size} size)</Text>
+        {
+          // loading ?
+          // <ActivityIndicator />
+          // :
+          items.map((item, index) => (
+            <View style={styles.itemsCart} key={index}>
+              <View style={{ flexDirection: 'row' }}>
+                <Icon style={{ color: '#742013' }} size={12} name="dot-circle" />
+                <View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.items}>{item.name}</Text>
+                    <Text style={styles.size}>({item.size} size)</Text>
+                  </View>
+                  <Text style={styles.items}>
+                    AED{' '}
+                    {Math.round(
+                      ((item.price - (item.price * item.discount) / 100) *
+                        item.quantity +
+                        Number.EPSILON) *
+                      100,
+                    ) / 100}
+                  </Text>
                 </View>
-                <Text style={styles.items}>
-                  AED{' '}
-                  {Math.round(
-                    ((item.price - (item.price * item.discount) / 100) *
-                      item.quantity +
-                      Number.EPSILON) *
-                    100,
-                  ) / 100}
-                </Text>
               </View>
-            </View>
 
-            <View style={styles.quantity}>
-              <TouchableOpacity style={styles.valuesBtn1}>
-                <Icons style={{ color: '#742013' }} size={15} name="remove" />
-              </TouchableOpacity>
-              <View style={styles.numberBox}>
-                <Text style={styles.numbers}>{item.quantity}</Text>
+              <View style={styles.quantity}>
+                <TouchableOpacity style={styles.valuesBtn1}>
+                  <Icons style={{ color: '#742013' }} size={15} name="remove" />
+                </TouchableOpacity>
+                <View style={styles.numberBox}>
+                  <Text style={styles.numbers}>{item.quantity}</Text>
+                </View>
+                <TouchableOpacity style={styles.valuesBtn2}>
+                  <Icons style={{ color: '#742013' }} size={15} name="add" />
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity style={styles.valuesBtn2}>
-                <Icons style={{ color: '#742013' }} size={15} name="add" />
-              </TouchableOpacity>
             </View>
-          </View>
-        ))}
+          ))
+        }
       </View>
 
       <View style={styles.inputField}>
@@ -299,24 +335,24 @@ const ViewCart = props => {
 
       <View style={styles.deliveryBox}>
         <Text>Delivery Option:</Text>
-          <View style={{ flexDirection: "row", marginTop: 5 }}>
-            <RadioButton
-              animation={'bounceIn'}
-              isSelected={deliveryIsSelected}
-              onPress={onDeliveryPressed}
-              size={12}
-            />
-            <Text style={{ marginLeft: 5 }}>Delivery</Text>
-          </View>
-          <View style={{ flexDirection: "row", marginTop: 5 }}>
-            <RadioButton
-              animation={'bounceIn'}
-              isSelected={pickupIsSelected}
-              onPress={onPickupPressed}
-              size={12}
-            />
-            <Text style={{ marginLeft: 5 }}>Pickup</Text>
-          </View>
+        <View style={{ flexDirection: "row", marginTop: 5 }}>
+          <RadioButton
+            animation={'bounceIn'}
+            isSelected={deliveryIsSelected}
+            onPress={onDeliveryPressed}
+            size={12}
+          />
+          <Text style={{ marginLeft: 5 }}>Delivery</Text>
+        </View>
+        <View style={{ flexDirection: "row", marginTop: 5 }}>
+          <RadioButton
+            animation={'bounceIn'}
+            isSelected={pickupIsSelected}
+            onPress={onPickupPressed}
+            size={12}
+          />
+          <Text style={{ marginLeft: 5 }}>Pickup</Text>
+        </View>
       </View>
 
       <TouchableOpacity
@@ -325,15 +361,28 @@ const ViewCart = props => {
           var branch_data = data;
           branch_data.type = deliveryOption;
           setData(branch_data);
-          props.props.navigation.navigate('Payment', {
-            items: items,
-            branch: data,
-            customer: customer,
-            instructions: instructions,
-            total: total,
-            delivery: delivery,
-            totalPoints: totalPoints,
-          })
+          if (deliveryOption == "Delivery") {
+            props.props.navigation.navigate('AddAddress', {
+              items: items,
+              branch: data,
+              customer: customer,
+              instructions: instructions,
+              total: total,
+              delivery: delivery,
+              totalPoints: totalPoints,
+            })
+          }
+          else {
+            props.props.navigation.navigate('Payment', {
+              items: items,
+              branch: data,
+              customer: customer,
+              instructions: instructions,
+              total: total,
+              delivery: delivery,
+              totalPoints: totalPoints,
+            })
+          }
         }
         }>
         <Text style={styles.locText}>Choose Payment Method</Text>
