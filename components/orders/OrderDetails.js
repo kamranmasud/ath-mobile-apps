@@ -97,7 +97,7 @@ const OrderDetails = props => {
       />
       <View style={styles.detailBox}>
         <View style={styles.boxesRow}>
-          <View style={styles.mainRow}>
+          <View style={styles.topRow}>
             <Icon name="delivery-dining" size={20} />
             <View style={{width: '100%'}}>
               <Text style={detailStyles.delivery}>{order.type}</Text>
@@ -108,6 +108,30 @@ const OrderDetails = props => {
             </View>
           </View>
         </View>
+        {
+          payment.address ?
+          <View style={styles.boxesRow}>
+            <Text style={detailStyles.delivery}>Delivery Address</Text>
+            <View style={styles.mainRow}>
+              <View style={{width: '100%'}}>
+                <View style={styles.rows}>
+                  <Text style={detailStyles.date}>Customer Name</Text>
+                  <Text style={detailStyles.orderNum}>{payment.address.name}</Text>
+                </View>
+                <View style={styles.rows}>
+                  <Text style={detailStyles.date}>Customer Contact</Text>
+                  <Text style={detailStyles.orderNum}>{payment.address.contact}</Text>
+                </View>
+                <View style={styles.rows}>
+                  <Text style={detailStyles.date}>Customer Address</Text>
+                  <Text style={detailStyles.orderNum}>{payment.address.address}</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+          :
+          <></>
+        }
         <View style={styles.boxesRow} height={30}>
           <View style={styles.rows}>
             <Text style={detailStyles.headings}>Status</Text>
@@ -140,8 +164,8 @@ const OrderDetails = props => {
             </Text>
           </View>
           <View style={styles.rows}>
-            <Text style={detailStyles.headings}>Points Worth Redeemed</Text>
-            <Text style={detailStyles.prices}>AED {payment.totalPoints}</Text>
+            <Text style={detailStyles.headings}>Total Points Earned</Text>
+            <Text style={detailStyles.prices}>{payment.totalPoints}</Text>
           </View>
         </View>
         <View style={styles.boxesRow}>
@@ -179,10 +203,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '90%',
   },
-  mainRow: {
+  topRow: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '95%',
+  },
+  mainRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
   },
   rows: {
     marginLeft: 2,
