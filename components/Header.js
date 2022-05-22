@@ -100,14 +100,13 @@ const headerStyles = StyleSheet.create({
   header: {
     height: 60,
     flexDirection: 'row',
-    justifyContent: 'space-evenly'
     // justifyContent: 'space-between',
   },
   heading: {
     height: 60,
-    width: 200,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    flex: 1
   },
   image: {
     width: 45,
