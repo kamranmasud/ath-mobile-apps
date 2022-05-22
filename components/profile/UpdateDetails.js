@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import PhoneNumber from '../login/PhoneNumber';
 import styles1 from '../styles/styles';
 import PhoneInput from 'react-native-phone-number-input';
+import axios from 'axios';
 
 const UpdateDetails = props => {
   const [mode, setMode] = useState('date');
@@ -59,7 +60,7 @@ const UpdateDetails = props => {
         let data = JSON.parse(value);
 
         axios
-          .get(url + "/get/customer/" + data.cust._id)
+          .get(url + "/get/customer/" + data.cust.id)
           .then(response => {
             setCustomer(response.data);
             setName(response.data.name);
@@ -171,6 +172,7 @@ const UpdateDetails = props => {
               } else {
                 console.log(jsonRes);
                 storeData(jsonRes);
+                alert("User updated successfully.");
                 //props.navigation.navigate('ViewProfile');
               }
             } catch (err) {
@@ -225,7 +227,7 @@ const UpdateDetails = props => {
         textInputStyle={styles.numText}
         //autoFocus
       /> */}
-      <Text style={styles.labels}>Date of Birth</Text>
+      {/* <Text style={styles.labels}>Date of Birth</Text> */}
       {/* <View style={styles.inputBox}>
         <TextInput
           style={styles.dateBox}

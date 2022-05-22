@@ -29,10 +29,11 @@ const ViewProfile = props => {
 
       if (value !== null) {
         let data = JSON.parse(value);
-
+        
         axios
-          .get(url + "/get/customer/" + data.cust._id)
+          .get(url + "/get/customer/" + data.cust.id)
           .then(response => {
+            // alert(JSON.stringify(response.data));
             setCustomer(response.data);
           })
           .catch(error => {
