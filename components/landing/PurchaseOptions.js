@@ -115,16 +115,16 @@ const styles = StyleSheet.create({
   },
   optionsView: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    // justifyContent: 'space-evenly',
   },
   optionsIcons: {
-    marginTop: 30,
+    marginTop: 20,
     marginBottom: 10,
-    margin: 7,
-    width: 65,
-    height: 60,
+    // margin: 7,
+    // width: 65,
+    // height: 60,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   options: {
     width: 50,
@@ -138,6 +138,8 @@ const styles = StyleSheet.create({
     marginTop: 7,
     color: '#742013',
     fontSize: 12,
+    width: 70,
+    textAlign: 'center'
   },
   iconStyles: {
     color: 'white',
